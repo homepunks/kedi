@@ -6,7 +6,7 @@ A small 2D game built with [Nim](https://nim-lang.org/) and [raylib](https://www
 
 ## Quickstart
 
-> **Warning** In case you want to use the make build tool, first create a ./build/
+> **Warning:** In case you want to use the make build tool, first create a ./build/
 
 ```console
 nimble install naylib
