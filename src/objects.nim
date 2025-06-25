@@ -11,7 +11,7 @@ type Shawarma* = object
   alive*: bool
 
 var shawarmasCount = 10
-var shawarmas: seq[Shawarma] = @[]
+# var shawarmas: seq[Shawarma] = @[]
 
 proc initShawarmas*(CollisionMask: Image): seq[Shawarma] =
   randomize()
@@ -27,7 +27,6 @@ proc initShawarmas*(CollisionMask: Image): seq[Shawarma] =
   
   for _ in 0..<shawarmasCount:
     var validPos = false
-    # var attempts: uint = 0
     var shawarmaPos: Vector2
 
     while not validPos: # and attempts < 100 (might add)
@@ -45,5 +44,6 @@ proc initShawarmas*(CollisionMask: Image): seq[Shawarma] =
 
     shawarmas.add(Shawarma(position: shawarmaPos, alive: true))
 
-  traceLog(INFO, "I DID THIS FOR " & $attempts & " TIMES!!")
+  var logAttempts = cstring("I DID THIS FOR " & $attempts & " TIMES!!")
+  traceLog(INFO, logAttempts)
   return shawarmas

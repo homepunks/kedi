@@ -1,6 +1,10 @@
 import raylib
 from loader import GameAssets, loadAssets
 from objects import Shawarma, initShawarmas
+from audio import
+  initAudio,
+  updateAudio,
+  closeAudio
 from runtime import
   isItWalkable,       #[FUNC: check if the player can move on (x,y)]#
   displayFPS,   
@@ -14,13 +18,16 @@ from runtime import
   dialogTimeOut,      #[MUT: remaining time of the message]#
   dialog,             #[MUT: dialog status                ]#
 
-  spawnageTimeout,
-  spawnage
+  spawnageTimeout,    #[MUT: countdown until spawnage starts]#
+  spawnage            #[MUT: spawnage status                ]#
 
 proc main(): void =
   initWindow(screenWidth, screenHeight, "KEDI-OYUN")
-  defer: closeWindow()
-  
+  initAudio()
+  defer:
+    closeAudio()
+    closeWindow()
+    
   let assets: GameAssets = loadAssets()
   let
     GameBackground = assets.background
@@ -44,6 +51,7 @@ proc main(): void =
     playerStep: float64 = 0.35
 
   while not windowShouldClose():
+    updateAudio()
     oldPlayerPosition = playerPosition
     if (isKeyDown(W)): playerPosition.y -= playerStep
     if (isKeyDown(A)): playerPosition.x -= playerStep
@@ -78,8 +86,6 @@ proc main(): void =
 
     drawTexture(GameBackground, Vector2(x: 0.0, y: 0.0), WHITE)
     drawTexture(PlayerFigure, playerPosition, 0.0f, 0.25f, WHITE)
-    # drawRectangleLinesEx(playerRect, 1, RED)
-    # drawRectangleLinesEx(shawarmaRect, 1, BLUE)
     displayFPS(screenWidth - 110, 25, RED)
     drawText("Score: " & $playerScore, 20, 20, 20, RED)
 
