@@ -11,7 +11,7 @@ const
 
 var
   dialogTimeout*: float64 = constDialogTimeout
-  dialog*: bool = true
+  dialog*: int = 1
 
   spawnageTimeout*: float64 = constSpawnageTimeout
   spawnage*: bool = false
@@ -50,7 +50,19 @@ proc msg1Controls*(): void =
     y: 100.0f
   )
       
-  var fadeColor: Color = GOLD;
+  var fadeColor: Color = GOLD
   fadeColor.a = uint8(dialogTimeout * 51)
   drawText(text, int32(textPos.x), int32(textPos.y), 40, fadeColor)
   discard
+
+proc msg2Eat*(): void =
+  let text: string = "Eat all foodies to gain power"
+  let textSize: int32 = measureText(text, 40)
+  let textPos = Vector2(
+    x: float64((screenWidth - textSize))/2.0,
+    y: 100.0f
+  )
+
+  var fadeColor: Color = GOLD
+  fadeColor.a = uint8(dialogTimeout * 51)
+  drawText(text, int32(textPos.x), int32(textPos.y), 40, fadeColor)
