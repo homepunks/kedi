@@ -3,15 +3,36 @@ package main
 import rl "vendor:raylib"
 
 main :: proc() {
-  window := Window{"kedi", 800, 600, 60, rl.ConfigFlags{.WINDOW_RESIZABLE, .WINDOW_HIGHDPI}}
+  rl.SetConfigFlags(WINDOW_FLAGS)
+  rl.InitWindow(VIRT_WIDTH, VIRT_HEIGHT, WINDOW_TITLE)
 
-  rl.SetConfigFlags(window.config_flags)
-  rl.InitWindow(window.width, window.height, window.name)
-  rl.SetTargetFPS(window.fps)
+  fit_to_monitor()
+
+  rl.SetTargetFPS(TARGET_FPS)
+  defer rl.CloseWindow()
 
   for !rl.WindowShouldClose() {
     rl.BeginDrawing()
     rl.ClearBackground(rl.PINK)
     rl.EndDrawing()
   }
+}
+
+fit_to_monitor :: proc() {
+  monitor := rl.GetCurrentMonitor()
+  mon_w := f32(rl.GetMonitorWidth(monitor))
+  mon_h := f32(rl.GetMonitorHeight(monitor))
+
+  fit := min(mon_w/VIRT_WIDTH, mon_h/VIRT_HEIGHT)
+  if fit > 1 do fit = 1
+  fit *= WINDOW_MARGIN
+
+  win_w := i32(VIRT_WIDTH * fit)
+  win_h := i32(VIRT_HEIGHT * fit)
+
+  rl.SetWindowSize(win_w, win_h)
+  rl.SetWindowPosition(
+    i32((mon_w-f32(win_w)) / 2),
+    i32((mon_h-f32(win_h)) / 2),
+  )
 }

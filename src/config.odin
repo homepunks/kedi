@@ -2,17 +2,21 @@ package main
 
 import rl "vendor:raylib"
 
-WINDOW_HEIGHT :: 800
-WINDOW_WIDTH :: 600
-TARGET_FPS :: 60
+WINDOW_TITLE :: "kedi"
+WINDOW_FLAGS :: rl.ConfigFlags{.WINDOW_RESIZABLE, .WINDOW_HIGHDPI}
+TARGET_FPS   :: 60
 
-WINDOW :: Window{"kedi", WINDOW_WIDTH, WINDOW_HEIGHT, TARGET_FPS, rl.ConfigFlags{.WINDOW_RESIZABLE, .WINDOW_HIGHDPI}}
+VIRT_WIDTH  :: 1920
+VIRT_HEIGHT :: 1080
 
-Window :: struct {
-  name: cstring,
-  width: i32,
-  height: i32,
-  fps: i32,
-  config_flags: rl.ConfigFlags,
-}
+WINDOW_MARGIN :: 0.9
+
+
+// Window :: struct {
+//   name: cstring,
+//   width: i32,
+//   height: i32,
+//   fps: i32,
+//   config_flags: rl.ConfigFlags,
+// }
 
