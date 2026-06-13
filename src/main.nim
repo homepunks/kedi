@@ -26,11 +26,28 @@ from runtime import
   spawnage            #[MUT: spawnage status                ]#
 
 proc main(): void =
+  setConfigFlags(flags(WindowResizable, WindowHighdpi))
   initWindow(screenWidth, screenHeight, "KEDI-OYUN")
   initAudio()
   defer:
     closeAudio()
     closeWindow()
+
+  let target = loadRenderTexture(screenWidth, screenHeight)
+  setTextureFilter(target.texture, Bilinear)
+
+  block fitWindow:
+    let m = getCurrentMonitor()
+    let monW = getMonitorWidth(m).float32
+    let monH = getMonitorHeight(m).float32
+    var fit = min(monW / screenWidth.float32, monH / screenHeight.float32)
+    if fit > 1.0f: fit = 1.0f
+    fit *= 0.9f                        
+    let winW = int32(screenWidth.float32  * fit)
+    let winH = int32(screenHeight.float32 * fit)
+    setWindowSize(winW, winH)
+    setWindowPosition(int32((monW - winW.float32) * 0.5f),
+                    int32((monH - winH.float32) * 0.5f))
     
   let assets: GameAssets = loadAssets()
   let
@@ -94,18 +111,13 @@ proc main(): void =
             playSound(meowSound)
             meowSoundPlay = true
                   
-    beginDrawing()
-    defer: endDrawing()
+    beginTextureMode(target)
+    clearBackground(BLACK)
 
     drawTexture(GameBackground, Vector2(x: 0.0, y: 0.0), WHITE)
     drawTexture(PlayerFigure, playerPosition, 0.0f, 0.25f, WHITE)
     displayFPS(screenWidth - 110, 25, RED)
     drawText("Score: " & $playerScore, 20, 20, 20, RED)
-
-    # if dialogTimeout <= 0: dialog = false
-    # if dialog: dialogTimeout -= getFrameTime()
-    # msg1Controls()
-    # msg2Eat()
 
     if dialog > 0:
       case dialog
@@ -120,15 +132,36 @@ proc main(): void =
           dialog = 0
         else:
           dialogTimeout = constDialogTimeout
-            
+
     spawnageTimeout -= getFrameTime()
     if spawnageTimeout < 0 and not spawnage:
-      shawarmas = initShawarmas(CollisionMask)
+      shawarmas = initShawarmas(CollisionMask, Eatables)
       spawnage = true
 
     if spawnage:
       for sh in shawarmas:
         if sh.alive:
           drawTexture(Eatables, sh.position, WHITE)
+
+    endTextureMode()
+
+    beginDrawing()
+    clearBackground(BLACK)
+    let
+      winW = getScreenWidth().float32
+      winH = getScreenHeight().float32
+      scale = min(winW / screenWidth.float32, winH / screenHeight.float32)
+      drawW = screenWidth.float32 * scale
+      drawH = screenHeight.float32 * scale
+    drawTexture(
+      target.texture,
+      Rectangle(x: 0.0f, y: 0.0f,
+                width: screenWidth.float32, height: -screenHeight.float32),
+      Rectangle(x: (winW - drawW) * 0.5f, y: (winH - drawH) * 0.5f,
+                width: drawW, height: drawH),
+      Vector2(x: 0.0f, y: 0.0f),
+      0.0f,
+      WHITE)
+    endDrawing()
 
 main()

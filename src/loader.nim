@@ -24,13 +24,6 @@ proc loadAssets*(): GameAssets =
     background: GameBackground,
     borders: CollisionMask,
     player: PlayerFigure,
-    boosts: Eatables 
+    boosts: Eatables
   )
 
-proc loadShawarmas*(): GameAssets.boosts =
-  let
-    Yemek: Image = loadImage("./assets/shawarma.png")
-    Eatables: Texture2D = loadTextureFromImage(Yemek)
-
-  return Eatables
-  

@@ -1,7 +1,6 @@
 #[module with game objects]#
 
 from runtime import screenWidth, screenHeight
-from loader import loadShawarmas
 
 import raylib
 import random
@@ -13,11 +12,10 @@ type Shawarma* = object
 var shawarmasCount = 10
 # var shawarmas: seq[Shawarma] = @[]
 
-proc initShawarmas*(CollisionMask: Image): seq[Shawarma] =
+proc initShawarmas*(CollisionMask: Image, foodie: Texture2D): seq[Shawarma] =
   randomize()
 
   var shawarmas: seq[Shawarma] = @[]
-  let foodie = loadShawarmas()
   let
     objWidth = foodie.width
     objHeight = foodie.height
