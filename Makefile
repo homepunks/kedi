@@ -1,4 +1,9 @@
 ODINFLAGS := -vet -strict-style
 
-kedi:
+.PHONY: clean
+
+kedi: src
 	odin build src -out:kedi $(ODINFLAGS)
+
+clean:
+	rm -f kedi
