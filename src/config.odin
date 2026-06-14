@@ -3,7 +3,7 @@ package main
 import rl "vendor:raylib"
 
 WINDOW_TITLE :: "kedi"
-WINDOW_FLAGS :: rl.ConfigFlags{.WINDOW_RESIZABLE, .WINDOW_HIGHDPI}
+WINDOW_FLAGS :: rl.ConfigFlags{.WINDOW_RESIZABLE, .WINDOW_HIGHDPI, .WINDOW_HIDDEN}
 TARGET_FPS   :: 60
 
 VIRT_WIDTH  :: 1920

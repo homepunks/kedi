@@ -5,11 +5,10 @@ import rl "vendor:raylib"
 main :: proc() {
   rl.SetConfigFlags(WINDOW_FLAGS)
   rl.InitWindow(VIRT_WIDTH, VIRT_HEIGHT, WINDOW_TITLE)
+  defer rl.CloseWindow()
 
   fit_to_monitor()
-
   rl.SetTargetFPS(TARGET_FPS)
-  defer rl.CloseWindow()
 
   for !rl.WindowShouldClose() {
     rl.BeginDrawing()
@@ -35,4 +34,5 @@ fit_to_monitor :: proc() {
     i32((mon_w-f32(win_w)) / 2),
     i32((mon_h-f32(win_h)) / 2),
   )
+  rl.ClearWindowState({.WINDOW_HIDDEN})
 }
