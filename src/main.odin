@@ -10,9 +10,18 @@ main :: proc() {
   fit_to_monitor()
   rl.SetTargetFPS(TARGET_FPS)
 
+  target := rl.LoadRenderTexture(VIRT_WIDTH, VIRT_HEIGHT)
+  defer rl.UnloadRenderTexture(target)
+  rl.SetTextureFilter(target.texture, .BILINEAR)
+
   for !rl.WindowShouldClose() {
+    rl.BeginTextureMode(target)
+    rl.ClearBackground(rl.SKYBLUE)
+    rl.EndTextureMode()
+
     rl.BeginDrawing()
     rl.ClearBackground(rl.PINK)
+    present_scaled(target)
     rl.EndDrawing()
   }
 }
@@ -35,4 +44,19 @@ fit_to_monitor :: proc() {
     i32((mon_h-f32(win_h)) / 2),
   )
   rl.ClearWindowState({.WINDOW_HIDDEN})
+}
+
+present_scaled :: proc(target: rl.RenderTexture2D) {
+  sw := f32(rl.GetScreenWidth())
+  sh := f32(rl.GetScreenHeight())
+  scale := min(sw/VIRT_WIDTH, sh/VIRT_HEIGHT)
+
+  dw := VIRT_WIDTH * scale
+  dh := VIRT_HEIGHT * scale
+  dx := (sw - dw) / 2
+  dy := (sh - dh) / 2
+
+  src := rl.Rectangle{0, 0, VIRT_WIDTH, -VIRT_HEIGHT}
+  dst := rl.Rectangle{dx, dy, dw, dh}
+  rl.DrawTexturePro(target.texture, src, dst, {0, 0}, 0, rl.WHITE)
 }
