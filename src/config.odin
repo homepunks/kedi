@@ -12,3 +12,4 @@ VIRT_HEIGHT :: 1080
 WINDOW_MARGIN :: 0.9
 
 ASSET_MAP :: "assets/turkey_2.png"
+ASSET_CAT :: "assets/kedi.png"

@@ -14,13 +14,16 @@ main :: proc() {
   defer rl.UnloadRenderTexture(target)
   rl.SetTextureFilter(target.texture, .BILINEAR)
 
-  map_tex := rl.LoadTexture(ASSET_MAP)
-  defer rl.UnloadTexture(map_tex)
+  assets := load_assets()
+  defer unload_assets(assets)
+
+  player := Player{{VIRT_WIDTH/2, VIRT_HEIGHT/2}}
 
   for !rl.WindowShouldClose() {
     rl.BeginTextureMode(target)
     rl.ClearBackground(rl.BLACK)
-    rl.DrawTexture(map_tex, 0, 0, rl.WHITE)
+    rl.DrawTexture(assets.textures[.Map], 0, 0, rl.WHITE)
+    rl.DrawTextureV(assets.textures[.Cat], player.pos, rl.WHITE)
     rl.EndTextureMode()
 
     rl.BeginDrawing()
